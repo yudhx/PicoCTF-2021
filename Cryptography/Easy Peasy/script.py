@@ -51,7 +51,7 @@ encrypted_flag = str(io.recvline(), "ascii").strip()
 # because of line 19 (`"{:02x}".format(ord(p) ^ k)`) where string formatting
 # is used to output the flag as a hexadecimal string where each character is
 # represetned by 2 characters.
-flag_len = int(len(encrypted_flag)/2)
+flag_len = len(encrypted_flag) // 2
 
 # Create a filler payload to reset the `c` variable in `otp.py` to 0 so we
 # can use the same key that was used to encrypt the flag.
@@ -66,9 +66,7 @@ def hex_to_dec_list(input_hex):
     # Convert a hex string to a decimal array.
     # Split the hex string into groups of 2.
     input_hex = [input_hex[i:i+2] for i in range(0, len(input_hex), 2)]
-    # Convert each two hex characters to decimal.
-    output = [int(x, 16) for x in input_hex]
-    return output
+    return [int(x, 16) for x in input_hex]
 
 # Create a message that we know that is the same length as the flag so
 # that the same key is used to encrypt it.

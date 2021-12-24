@@ -18,12 +18,10 @@ def shift(c, k):
 
 flag = "redacted"
 key = "b"
-assert all([k in ALPHABET for k in key])
+assert all(k in ALPHABET for k in key)
 assert len(key) == 1
 
 b16 = b16_encode(flag)
 print(b16)
-enc = ""
-for i, c in enumerate(b16):
-	enc += shift(c, key[i % len(key)])
+enc = "".join(shift(c, key[i % len(key)]) for i, c in enumerate(b16))
 print(enc)

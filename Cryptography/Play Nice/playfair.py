@@ -35,14 +35,9 @@ def encrypt_pair(pair, matrix):
 		return matrix[p1[0]][p2[1]] + matrix[p2[0]][p1[1]]
 
 def encrypt_string(s, matrix):
-	result = ""
-	if len(s) % 2 == 0:
-		plain = s
-	else:
-		plain = s + "meiktp6yh4wxruavj9no13fb8d027c5glzsq"[0]
-	for i in range(0, len(plain), 2):
-		result += encrypt_pair(plain[i:i + 2], matrix)
-	return result
+	plain = s if len(s) % 2 == 0 else s + "meiktp6yh4wxruavj9no13fb8d027c5glzsq"[0]
+	return "".join(
+	    encrypt_pair(plain[i:i + 2], matrix) for i in range(0, len(plain), 2))
 
 alphabet = open("key").read().rstrip()
 m = generate_square(alphabet)

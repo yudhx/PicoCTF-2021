@@ -62,7 +62,7 @@ class TwoTriesGuess(object):
 class TwoTriesBlockCipherGuess(TwoTriesGuess):
     def range(self):
         """ Default range for 8 or 16 bytes block cipher. """
-        return range(0, 20)
+        return range(20)
 
     def guesses(self, uncompressible_bytes):
         good = self.oracle.oracle(
@@ -192,8 +192,7 @@ class CompressionOracle(object):
             if len(queue) == 0:
                 break
 
-        kept = [g for g in guesses if g.keep()]
-        return kept
+        return [g for g in guesses if g.keep()]
 
     def run(self):
         """ run the attack against the comression oracle. """
@@ -304,7 +303,7 @@ class Client(CompressionOracle):
         self.io = io
     def oracle(self, guess_data):
         # Return the length of `guess_data` after the vulnerable server has compressed it.
-        for attempt in range(10):
+        for _ in range(10):
             try:
                 self.io.sendlineafter("Enter your text to be encrypted: ", guess_data)
                 nonce = self.io.recvline()

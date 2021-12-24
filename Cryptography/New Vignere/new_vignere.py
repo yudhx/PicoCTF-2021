@@ -17,13 +17,11 @@ def shift(c, k):
 	return ALPHABET[(t1 + t2) % len(ALPHABET)]
 
 flag = "redacted"
-assert all([c in "abcdef0123456789" for c in flag])
+assert all(c in "abcdef0123456789" for c in flag)
 
 key = "redacted"
-assert all([k in ALPHABET for k in key]) and len(key) < 15
+assert all(k in ALPHABET for k in key) and len(key) < 15
 
 b16 = b16_encode(flag)
-enc = ""
-for i, c in enumerate(b16):
-	enc += shift(c, key[i % len(key)])
+enc = "".join(shift(c, key[i % len(key)]) for i, c in enumerate(b16))
 print(enc)
