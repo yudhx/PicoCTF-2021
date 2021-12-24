@@ -61,18 +61,15 @@ for idx, column in enumerate(cipher_text_grid.T):
     for letter in ALPHABET:
         total_guesses += 1
         # `letter` is the key
-        dec = ""
-        # Apply the opposite of the `shift` function on each letter.
-        for i, c in enumerate(column):
-            dec += unshift(c, letter)
+        dec = "".join(unshift(c, letter) for c in column)
         # Reverse the `b16_encode` function.
         dec = b16_decode(dec)
         # Only count keys as potentially valid if the `b16_decode` produces output
         # that meets the requirements in the assert statement in `new_vignere.py`.
-        if all([c in "abcdef0123456789" for c in dec.strip()[:-1]]):
+        if all(c in "abcdef0123456789" for c in dec.strip()[:-1]):
             print("Found key `%s`... " % letter, end="")
             key[idx].append(letter)
-    
+
     if not key[idx]:
         # No key found
         key[idx] = -1
@@ -86,22 +83,22 @@ print("Bruteforcing %i values..." % num_unknown)
 for key_filler in tqdm(itertools.permutations(ALPHABET, num_unknown)):
     total_guesses += 1
     key_filler = list(key_filler)
-    full_key = ""
-    for idx, letter in key.items():
-        if letter == -1:  # if letter of key is unknown
-            full_key += key_filler.pop()
-        else:
-            full_key += letter[0]
+    full_key = "".join(
+        key_filler.pop() if letter == -1 else letter[0]
+        for letter in key.values()
+    )
+
     full_key = "".join(full_key)
-    dec = ""
-    # Apply the opposite of the `shift` function on each letter.
-    for i, c in enumerate(cipher_text):
-        dec += unshift(c, full_key[i % len(full_key)])
+    dec = "".join(
+        unshift(c, full_key[i % len(full_key)])
+        for i, c in enumerate(cipher_text)
+    )
+
     # Reverse the `b16_encode` function.
     dec = b16_decode(dec)
     # Only show potential flags that meets the requirements in the
     # assert statement in `new_vignere.py`.
-    if all([c in "abcdef0123456789" for c in dec.strip()]):
+    if all(c in "abcdef0123456789" for c in dec.strip()):
         print("Flag Possibility: picoCTF{%s}" % dec)
 
 print("Bruteforcing Complete")

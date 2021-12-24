@@ -96,13 +96,7 @@ lowercase letter choice (a/b/c/d).")
 
 
 def validate_choice(menu_choice):
-    if menu_choice == "a" or \
-       menu_choice == "b" or \
-       menu_choice == "c" or \
-       menu_choice == "d":
-        return True
-    else:
-        return False
+    return menu_choice in ["a", "b", "c", "d"]
 
 
 def estimate_burn():
@@ -143,58 +137,52 @@ def check_key(key, username_trial):
 
     if len(key) != len(key_full_template_trial):
         return False
+    # Check static base key part --v
+    i = 0
+    for c in key_part_static1_trial:
+        if key[i] != c:
+            return False
+
+        i += 1
+
+    # TODO : test performance on toolbox container
+    # Check dynamic part --v
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
+        return False
     else:
-        # Check static base key part --v
-        i = 0
-        for c in key_part_static1_trial:
-            if key[i] != c:
-                return False
+        i += 1
 
-            i += 1
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
+        return False
+    else:
+        i += 1
 
-        # TODO : test performance on toolbox container
-        # Check dynamic part --v
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
-            return False
-        else:
-            i += 1
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
+        return False
+    else:
+        i += 1
 
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
-            return False
-        else:
-            i += 1
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
+        return False
+    else:
+        i += 1
 
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
-            return False
-        else:
-            i += 1
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
+        return False
+    else:
+        i += 1
 
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
-            return False
-        else:
-            i += 1
+    if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
+        return False
+    else:
+        i += 1
 
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
-            return False
-        else:
-            i += 1
+    if key[i] == hashlib.sha256(username_trial).hexdigest()[1]:
+        i += 1
 
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[1]:
-            return False
-        else:
-            i += 1
-
-        if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
-            return False
-
-
-
-        return True
+    else:
+        return False
+    return key[i] == hashlib.sha256(username_trial).hexdigest()[8]
 
 
 def decrypt_full_version(key_str):

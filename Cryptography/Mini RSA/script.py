@@ -9,16 +9,15 @@ c = Decimal(12200123185888718861325247578988844221745345580555937133090883049102
 def int_to_ascii(m):
     # Decode to ascii (from https://crypto.stackexchange.com/a/80346)
     m_hex = hex(int(m))[2:-1]  # Number to hex
-    m_ascii = "".join(
+    return "".join(
         chr(int(m_hex[i : i + 2], 16)) for i in range(0, len(m_hex), 2)
-    )  # Hex to Ascii
-    return m_ascii
+    )
 
 
 # Find padding
 getcontext().prec = 280  # Increase precision
 padding = 0
-for k in tqdm(range(0, 10_000)):
+for k in tqdm(range(10_000)):
     m = pow(k * N + c, 1 / e)
 
     m_ascii = int_to_ascii(m)

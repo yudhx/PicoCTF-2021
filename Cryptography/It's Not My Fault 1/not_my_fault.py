@@ -36,11 +36,10 @@ def get_flag(p, q):
 	if (time.time() - start) > (15 * 60):
 		print("Too long!")
 		exit()
+	elif ans == p + q:
+		print(FLAG)
 	else:
-		if ans == p + q:
-			print(FLAG)
-		else:
-			print("oops...")
+		print("oops...")
 
 
 #PoW

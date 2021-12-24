@@ -39,10 +39,7 @@ def is_ascii(s):
 # Try every possible offset to see what key produces the flag.
 for letter in ALPHABET:
     # `letter` is the key
-    dec = ""
-    # Apply the opposite of the `shift` function on each letter.
-    for i, c in enumerate(cipher_text):
-        dec += unshift(c, letter)
+    dec = "".join(unshift(c, letter) for c in cipher_text)
     # Reverse the `b16_encode` function.
     dec = b16_decode(dec)
     # Only show potential flags that are ascii.
